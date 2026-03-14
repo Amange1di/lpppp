@@ -266,11 +266,11 @@ function AbsRelCalculator() {
             <p>{result.error}</p>
           ) : (
             <>
+              <p className="result-title">Результат</p>
+              <p>Абсолютная погрешность: Δ = {formatNumber(result.delta, 8)}</p>
               <p>
-                Δ = {formatNumber(result.delta, 8)}
-              </p>
-              <p>
-                δ = {result.rel === null ? "—" : formatNumber(result.rel, 8)}
+                Относительная погрешность: δ ={" "}
+                {result.rel === null ? "—" : formatNumber(result.rel, 8)}
               </p>
               {result.relPercent !== undefined ? (
                 <p>
@@ -337,9 +337,17 @@ function IntervalCalculator() {
           {result.error ? (
             <p>{result.error}</p>
           ) : (
-            <p>
-              A ∈ [{formatNumber(result.lower, 6)}; {formatNumber(result.upper, 6)}]
-            </p>
+            <>
+              <p className="result-title">Результат</p>
+              <p>
+                Истинное значение A лежит в интервале: [
+                {formatFixed(result.lower, 6)}; {formatFixed(result.upper, 6)}]
+              </p>
+              <p>
+                (a − Δa = {formatFixed(result.lower, 6)}, a + Δa ={" "}
+                {formatFixed(result.upper, 6)})
+              </p>
+            </>
           )}
         </ResultBox>
       ) : null}
@@ -470,9 +478,24 @@ function OperationErrorCalculator() {
             <p>{result.error}</p>
           ) : (
             <>
-              <p>Результат: {formatNumber(result.value, 8)}</p>
-              <p>Δ ≤ {formatNumber(result.delta, 8)}</p>
-              <p>δ ≤ {result.rel === null ? "—" : formatNumber(result.rel, 8)}</p>
+              <p className="result-title">Результат</p>
+              <p>
+                {operation === "sum" && "Δ(x + y) = Δx + Δy"}
+                {operation === "diff" && "Δ(x − y) = Δx + Δy"}
+                {operation === "prod" && "δ(x · y) = δx + δy"}
+                {operation === "quot" && "δ(x / y) = δx + δy"}
+              </p>
+              <p>Результат операции: z = {formatNumber(result.value, 8)}</p>
+              <p>Предельная абсолютная погрешность: Δz ≈ {formatNumber(result.delta, 8)}</p>
+              <p>
+                Предельная относительная: δz ≈{" "}
+                {result.rel === null ? "—" : formatSci(result.rel, 4)}
+              </p>
+              <p>
+                Истинное значение в интервале: [
+                {formatFixed(result.value - result.delta, 6)};{" "}
+                {formatFixed(result.value + result.delta, 6)}]
+              </p>
             </>
           )}
         </ResultBox>
